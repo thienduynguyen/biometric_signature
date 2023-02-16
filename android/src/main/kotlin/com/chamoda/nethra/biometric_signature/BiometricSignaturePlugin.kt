@@ -137,7 +137,7 @@ class BiometricSignaturePlugin : FlutterPlugin, MethodCallHandler, ActivityAware
             }
           }
         }).authenticate(PromptInfo.Builder()
-        .setAllowedAuthenticators(BiometricManager.Authenticators.BIOMETRIC_STRONG)
+        .setAllowedAuthenticators(BiometricManager.Authenticators.BIOMETRIC_WEAK)
         .setNegativeButtonText(cancelButtonText)
         .setTitle(promptMessage)
         .build(), cryptoObject)
@@ -176,12 +176,12 @@ class BiometricSignaturePlugin : FlutterPlugin, MethodCallHandler, ActivityAware
 
   private fun biometricAuthAvailable(@NonNull result: MethodChannel.Result) {
     val biometricManager = BiometricManager.from(activity)
-    val canAuthenticate = biometricManager.canAuthenticate(BiometricManager.Authenticators.BIOMETRIC_STRONG)
+    val canAuthenticate = biometricManager.canAuthenticate(BiometricManager.Authenticators.BIOMETRIC_WEAK)
 
     if (canAuthenticate == BiometricManager.BIOMETRIC_SUCCESS) {
-      result.success("fingerprint|face|iris".toRegex().find(
+      result.success("face|iris|fingerprint".toRegex().find(
         BiometricManager.from(activity)
-          .getStrings(BiometricManager.Authenticators.BIOMETRIC_STRONG)?.buttonLabel.toString()
+          .getStrings(BiometricManager.Authenticators.BIOMETRIC_WEAK)?.buttonLabel.toString()
           .lowercase(
             Locale.ROOT
           )
